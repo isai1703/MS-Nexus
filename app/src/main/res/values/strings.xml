@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MS-Nexus</string>
+    <string name="welcome_title">MS Nexus</string>
+    <string name="welcome_subtitle">Powered by Multiservicios</string>
+</resources>
