@@ -13,7 +13,5 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.tvWelcome.text = "MS NEXUS\npowered by Multiservicios"
     }
 }
