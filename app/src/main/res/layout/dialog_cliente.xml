@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -30,7 +29,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="RFC"
-            android:inputType="textCapCharacters" />
+            android:inputType="textCapCharacters"
+            android:maxLength="13" />
 
         <EditText
             android:id="@+id/etRazonSocial"
@@ -40,19 +40,19 @@
             android:inputType="textCapWords" />
 
         <EditText
+            android:id="@+id/etRegimenFiscal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Régimen fiscal"
+            android:inputType="textCapWords" />
+
+        <EditText
             android:id="@+id/etCodigoPostalFiscal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Código postal fiscal"
             android:inputType="number"
             android:maxLength="5" />
-
-        <EditText
-            android:id="@+id/etRegimenFiscal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Régimen fiscal"
-            android:inputType="text" />
 
         <EditText
             android:id="@+id/etTelefono"

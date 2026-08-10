@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.multiservicios.msnexus.R
 import com.multiservicios.msnexus.databinding.FragmentDashboardBinding
 import com.multiservicios.msnexus.ui.clientes.ClientesFragment
+import com.multiservicios.msnexus.ui.ordenes.OrdenesFragment
 import com.multiservicios.msnexus.viewmodel.DashboardViewModel
 
 class DashboardFragment : Fragment() {
@@ -32,10 +34,9 @@ class DashboardFragment : Fragment() {
         binding.tvCompany.text = viewModel.companyName
 
         binding.btnClientes.setOnClickListener {
-
             parentFragmentManager.beginTransaction()
                 .replace(
-                    com.multiservicios.msnexus.R.id.main_container,
+                    R.id.main_container,
                     ClientesFragment()
                 )
                 .addToBackStack(null)
@@ -43,8 +44,17 @@ class DashboardFragment : Fragment() {
         }
 
         binding.btnInventory.setOnClickListener {
-
             // Inventario se conectará en la siguiente etapa.
+        }
+
+        binding.btnOrdenes.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(
+                    R.id.main_container,
+                    OrdenesFragment()
+                )
+                .addToBackStack(null)
+                .commit()
         }
 
         return binding.root

@@ -36,8 +36,8 @@ class ClienteViewModel(
         empresa: String,
         rfc: String,
         razonSocial: String,
-        codigoPostalFiscal: String,
         regimenFiscal: String,
+        codigoPostalFiscal: String,
         telefono: String,
         correo: String,
         direccion: String,
@@ -55,8 +55,8 @@ class ClienteViewModel(
                     empresa = empresa.trim(),
                     rfc = rfc.trim().uppercase(),
                     razonSocial = razonSocial.trim(),
-                    codigoPostalFiscal = codigoPostalFiscal.trim(),
                     regimenFiscal = regimenFiscal.trim(),
+                    codigoPostalFiscal = codigoPostalFiscal.trim(),
                     telefono = telefono.trim(),
                     correo = correo.trim(),
                     direccion = direccion.trim()
@@ -76,8 +76,8 @@ class ClienteViewModel(
         empresa: String,
         rfc: String,
         razonSocial: String,
-        codigoPostalFiscal: String,
         regimenFiscal: String,
+        codigoPostalFiscal: String,
         telefono: String,
         correo: String,
         direccion: String,
@@ -95,14 +95,15 @@ class ClienteViewModel(
                     empresa = empresa.trim(),
                     rfc = rfc.trim().uppercase(),
                     razonSocial = razonSocial.trim(),
-                    codigoPostalFiscal = codigoPostalFiscal.trim(),
                     regimenFiscal = regimenFiscal.trim(),
+                    codigoPostalFiscal = codigoPostalFiscal.trim(),
                     telefono = telefono.trim(),
                     correo = correo.trim(),
                     direccion = direccion.trim()
                 )
 
                 repository.actualizar(actualizado)
+
                 onResultado(true)
 
             } catch (e: Exception) {
@@ -113,7 +114,10 @@ class ClienteViewModel(
 
     fun eliminarCliente(cliente: ClienteEntity) {
         viewModelScope.launch {
-            repository.eliminar(cliente)
+            try {
+                repository.eliminar(cliente)
+            } catch (_: Exception) {
+            }
         }
     }
 }

@@ -21,8 +21,9 @@ class ClienteRepository(
         empresa: String,
         rfc: String,
         razonSocial: String,
-        codigoPostalFiscal: String,
         regimenFiscal: String,
+        usoCfdi: String,
+        codigoPostalFiscal: String,
         telefono: String,
         correo: String,
         direccion: String
@@ -37,8 +38,9 @@ class ClienteRepository(
                 empresa = empresa,
                 rfc = rfc,
                 razonSocial = razonSocial,
-                codigoPostalFiscal = codigoPostalFiscal,
                 regimenFiscal = regimenFiscal,
+                usoCfdi = usoCfdi,
+                codigoPostalFiscal = codigoPostalFiscal,
                 telefono = telefono,
                 correo = correo,
                 direccion = direccion
