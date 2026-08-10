@@ -14,6 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.multiservicios.msnexus.R
+import com.multiservicios.msnexus.data.local.ClienteEntity
 import com.multiservicios.msnexus.data.local.OrdenEntity
 import com.multiservicios.msnexus.databinding.FragmentOrdenesBinding
 import com.multiservicios.msnexus.viewmodel.ClienteViewModel
@@ -31,6 +32,8 @@ class OrdenesFragment : Fragment() {
 
     private lateinit var adapter: OrdenAdapter
 
+    private var clientesActuales: List<ClienteEntity> = emptyList()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,12 +49,12 @@ class OrdenesFragment : Fragment() {
         configurarLista()
         configurarEventos()
         observarOrdenes()
+        observarClientes()
 
         return binding.root
     }
 
     private fun configurarLista() {
-
         adapter = OrdenAdapter { orden ->
             mostrarOpciones(orden)
         }
@@ -63,20 +66,16 @@ class OrdenesFragment : Fragment() {
     }
 
     private fun configurarEventos() {
-
         binding.btnNuevaOrden.setOnClickListener {
             mostrarFormulario()
         }
     }
 
     private fun observarOrdenes() {
-
         viewLifecycleOwner.lifecycleScope.launch {
-
             viewLifecycleOwner.repeatOnLifecycle(
                 Lifecycle.State.STARTED
             ) {
-
                 viewModel.ordenes.collect { ordenes ->
 
                     adapter.submitList(ordenes)
@@ -92,18 +91,27 @@ class OrdenesFragment : Fragment() {
         }
     }
 
-    private fun mostrarFormulario() {
+    private fun observarClientes() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(
+                Lifecycle.State.STARTED
+            ) {
+                clienteViewModel.clientes.collect { clientes ->
+                    clientesActuales = clientes
+                }
+            }
+        }
+    }
 
-        val clientes = clienteViewModel.clientes.value
+    private fun mostrarFormulario() {
+        val clientes = clientesActuales
 
         if (clientes.isEmpty()) {
-
             Toast.makeText(
                 requireContext(),
                 "Primero registra al menos un cliente",
                 Toast.LENGTH_LONG
             ).show()
-
             return
         }
 
@@ -114,19 +122,13 @@ class OrdenesFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Seleccionar cliente")
             .setItems(nombres) { _, posicion ->
-
-                val cliente = clientes[posicion]
-
-                mostrarFormularioOrden(cliente)
+                mostrarFormularioOrden(clientes[posicion])
             }
             .setNegativeButton("Cancelar", null)
             .show()
     }
 
-    private fun mostrarFormularioOrden(
-        cliente: com.multiservicios.msnexus.data.local.ClienteEntity
-    ) {
-
+    private fun mostrarFormularioOrden(cliente: ClienteEntity) {
         val dialogView = layoutInflater.inflate(
             R.layout.dialog_orden,
             null
@@ -171,39 +173,27 @@ class OrdenesFragment : Fragment() {
                     etIva.text.toString().toDoubleOrNull() ?: 0.0
 
                 viewModel.crearOrden(
-
                     numeroCliente = cliente.numeroCliente,
                     nombreCliente = cliente.nombre,
                     empresa = cliente.empresa,
                     telefono = cliente.telefono,
                     correo = cliente.correo,
                     direccion = cliente.direccion,
-
-                    tipoTrabajo =
-                        etTipoTrabajo.text.toString(),
-
-                    descripcionTrabajo =
-                        etDescripcion.text.toString(),
-
-                    fechaProgramada =
-                        etFechaProgramada.text.toString(),
-
+                    tipoTrabajo = etTipoTrabajo.text.toString(),
+                    descripcionTrabajo = etDescripcion.text.toString(),
+                    fechaProgramada = etFechaProgramada.text.toString(),
                     subtotal = subtotal,
                     descuento = descuento,
                     ivaPorcentaje = iva
-
                 ) { correcto ->
 
                     if (correcto) {
-
                         Toast.makeText(
                             requireContext(),
                             "Orden creada correctamente",
                             Toast.LENGTH_SHORT
                         ).show()
-
                     } else {
-
                         Toast.makeText(
                             requireContext(),
                             "No se pudo crear la orden",
@@ -216,7 +206,6 @@ class OrdenesFragment : Fragment() {
     }
 
     private fun mostrarOpciones(orden: OrdenEntity) {
-
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(orden.folio)
             .setItems(
@@ -232,19 +221,14 @@ class OrdenesFragment : Fragment() {
                     "Eliminar orden"
                 )
             ) { _, opcion ->
-
                 if (opcion == 4) {
-
                     confirmarEliminacion(orden)
                 }
             }
             .show()
     }
 
-    private fun confirmarEliminacion(
-        orden: OrdenEntity
-    ) {
-
+    private fun confirmarEliminacion(orden: OrdenEntity) {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Eliminar orden")
             .setMessage(
@@ -265,9 +249,7 @@ class OrdenesFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-
         super.onDestroyView()
-
         _binding = null
     }
 }
