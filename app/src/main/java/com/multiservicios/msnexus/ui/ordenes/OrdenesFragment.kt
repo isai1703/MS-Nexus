@@ -1,11 +1,14 @@
 package com.multiservicios.msnexus.ui.ordenes
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -17,9 +20,11 @@ import com.multiservicios.msnexus.R
 import com.multiservicios.msnexus.data.local.ClienteEntity
 import com.multiservicios.msnexus.data.local.OrdenEntity
 import com.multiservicios.msnexus.databinding.FragmentOrdenesBinding
+import com.multiservicios.msnexus.util.OrdenPdfGenerator
 import com.multiservicios.msnexus.viewmodel.ClienteViewModel
 import com.multiservicios.msnexus.viewmodel.OrdenViewModel
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.Locale
 
 class OrdenesFragment : Fragment() {
@@ -32,7 +37,8 @@ class OrdenesFragment : Fragment() {
 
     private lateinit var adapter: OrdenAdapter
 
-    private var clientesActuales: List<ClienteEntity> = emptyList()
+    private var clientesActuales: List<ClienteEntity> =
+        emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,6 +61,7 @@ class OrdenesFragment : Fragment() {
     }
 
     private fun configurarLista() {
+
         adapter = OrdenAdapter { orden ->
             mostrarOpciones(orden)
         }
@@ -66,16 +73,20 @@ class OrdenesFragment : Fragment() {
     }
 
     private fun configurarEventos() {
+
         binding.btnNuevaOrden.setOnClickListener {
             mostrarFormulario()
         }
     }
 
     private fun observarOrdenes() {
+
         viewLifecycleOwner.lifecycleScope.launch {
+
             viewLifecycleOwner.repeatOnLifecycle(
                 Lifecycle.State.STARTED
             ) {
+
                 viewModel.ordenes.collect { ordenes ->
 
                     adapter.submitList(ordenes)
@@ -92,10 +103,13 @@ class OrdenesFragment : Fragment() {
     }
 
     private fun observarClientes() {
+
         viewLifecycleOwner.lifecycleScope.launch {
+
             viewLifecycleOwner.repeatOnLifecycle(
                 Lifecycle.State.STARTED
             ) {
+
                 clienteViewModel.clientes.collect { clientes ->
                     clientesActuales = clientes
                 }
@@ -104,14 +118,17 @@ class OrdenesFragment : Fragment() {
     }
 
     private fun mostrarFormulario() {
+
         val clientes = clientesActuales
 
         if (clientes.isEmpty()) {
+
             Toast.makeText(
                 requireContext(),
                 "Primero registra al menos un cliente",
                 Toast.LENGTH_LONG
             ).show()
+
             return
         }
 
@@ -122,35 +139,55 @@ class OrdenesFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Seleccionar cliente")
             .setItems(nombres) { _, posicion ->
-                mostrarFormularioOrden(clientes[posicion])
+                mostrarFormularioOrden(
+                    clientes[posicion]
+                )
             }
-            .setNegativeButton("Cancelar", null)
+            .setNegativeButton(
+                "Cancelar",
+                null
+            )
             .show()
     }
 
-    private fun mostrarFormularioOrden(cliente: ClienteEntity) {
+    private fun mostrarFormularioOrden(
+        cliente: ClienteEntity
+    ) {
+
         val dialogView = layoutInflater.inflate(
             R.layout.dialog_orden,
             null
         )
 
         val etTipoTrabajo =
-            dialogView.findViewById<EditText>(R.id.etTipoTrabajo)
+            dialogView.findViewById<EditText>(
+                R.id.etTipoTrabajo
+            )
 
         val etDescripcion =
-            dialogView.findViewById<EditText>(R.id.etDescripcionTrabajo)
+            dialogView.findViewById<EditText>(
+                R.id.etDescripcionTrabajo
+            )
 
         val etFechaProgramada =
-            dialogView.findViewById<EditText>(R.id.etFechaProgramada)
+            dialogView.findViewById<EditText>(
+                R.id.etFechaProgramada
+            )
 
         val etSubtotal =
-            dialogView.findViewById<EditText>(R.id.etSubtotal)
+            dialogView.findViewById<EditText>(
+                R.id.etSubtotal
+            )
 
         val etDescuento =
-            dialogView.findViewById<EditText>(R.id.etDescuento)
+            dialogView.findViewById<EditText>(
+                R.id.etDescuento
+            )
 
         val etIva =
-            dialogView.findViewById<EditText>(R.id.etIva)
+            dialogView.findViewById<EditText>(
+                R.id.etIva
+            )
 
         etIva.setText("16")
 
@@ -160,40 +197,79 @@ class OrdenesFragment : Fragment() {
                 "${cliente.numeroCliente} • ${cliente.nombre}"
             )
             .setView(dialogView)
-            .setNegativeButton("Cancelar", null)
-            .setPositiveButton("Crear orden") { _, _ ->
+            .setNegativeButton(
+                "Cancelar",
+                null
+            )
+            .setPositiveButton(
+                "Crear orden"
+            ) { _, _ ->
 
                 val subtotal =
-                    etSubtotal.text.toString().toDoubleOrNull() ?: 0.0
+                    etSubtotal.text
+                        .toString()
+                        .toDoubleOrNull() ?: 0.0
 
                 val descuento =
-                    etDescuento.text.toString().toDoubleOrNull() ?: 0.0
+                    etDescuento.text
+                        .toString()
+                        .toDoubleOrNull() ?: 0.0
 
                 val iva =
-                    etIva.text.toString().toDoubleOrNull() ?: 0.0
+                    etIva.text
+                        .toString()
+                        .toDoubleOrNull() ?: 0.0
 
                 viewModel.crearOrden(
-                    numeroCliente = cliente.numeroCliente,
-                    nombreCliente = cliente.nombre,
-                    empresa = cliente.empresa,
-                    telefono = cliente.telefono,
-                    correo = cliente.correo,
-                    direccion = cliente.direccion,
-                    tipoTrabajo = etTipoTrabajo.text.toString(),
-                    descripcionTrabajo = etDescripcion.text.toString(),
-                    fechaProgramada = etFechaProgramada.text.toString(),
-                    subtotal = subtotal,
-                    descuento = descuento,
-                    ivaPorcentaje = iva
+
+                    numeroCliente =
+                        cliente.numeroCliente,
+
+                    nombreCliente =
+                        cliente.nombre,
+
+                    empresa =
+                        cliente.empresa,
+
+                    telefono =
+                        cliente.telefono,
+
+                    correo =
+                        cliente.correo,
+
+                    direccion =
+                        cliente.direccion,
+
+                    tipoTrabajo =
+                        etTipoTrabajo.text.toString(),
+
+                    descripcionTrabajo =
+                        etDescripcion.text.toString(),
+
+                    fechaProgramada =
+                        etFechaProgramada.text.toString(),
+
+                    subtotal =
+                        subtotal,
+
+                    descuento =
+                        descuento,
+
+                    ivaPorcentaje =
+                        iva
+
                 ) { correcto ->
 
                     if (correcto) {
+
                         Toast.makeText(
                             requireContext(),
                             "Orden creada correctamente",
                             Toast.LENGTH_SHORT
                         ).show()
+
                     } else {
+
                         Toast.makeText(
                             requireContext(),
                             "No se pudo crear la orden",
@@ -205,7 +281,10 @@ class OrdenesFragment : Fragment() {
             .show()
     }
 
-    private fun mostrarOpciones(orden: OrdenEntity) {
+    private fun mostrarOpciones(
+        orden: OrdenEntity
+    ) {
+
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(orden.folio)
             .setItems(
@@ -213,31 +292,209 @@ class OrdenesFragment : Fragment() {
                     "Cliente: ${orden.nombreCliente}",
                     "Trabajo: ${orden.tipoTrabajo}",
                     "Estado: ${orden.estado}",
-                    "Total: $${String.format(
-                        Locale.getDefault(),
-                        "%.2f",
-                        orden.total
-                    )}",
+                    "Total: $${
+                        String.format(
+                            Locale.getDefault(),
+                            "%.2f",
+                            orden.total
+                        )
+                    }",
+                    "Cambiar estatus",
+                    "Generar PDF",
                     "Eliminar orden"
                 )
             ) { _, opcion ->
-                if (opcion == 4) {
-                    confirmarEliminacion(orden)
+
+                when (opcion) {
+
+                    4 -> {
+                        mostrarEstados(orden)
+                    }
+
+                    5 -> {
+                        generarPdf(orden)
+                    }
+
+                    6 -> {
+                        confirmarEliminacion(orden)
+                    }
                 }
             }
             .show()
     }
 
-    private fun confirmarEliminacion(orden: OrdenEntity) {
+    private fun mostrarEstados(
+        orden: OrdenEntity
+    ) {
+
+        val estados = arrayOf(
+            "Pendiente",
+            "Autorizada",
+            "En proceso",
+            "Finalizada",
+            "Cancelada"
+        )
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(
+                "Estatus de ${orden.folio}"
+            )
+            .setSingleChoiceItems(
+                estados,
+                estados.indexOf(orden.estado)
+            ) { dialog, posicion ->
+
+                val nuevoEstado =
+                    estados[posicion]
+
+                viewModel.cambiarEstado(
+                    orden,
+                    nuevoEstado
+                ) { correcto ->
+
+                    if (correcto) {
+
+                        Toast.makeText(
+                            requireContext(),
+                            "Estatus actualizado: $nuevoEstado",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                    } else {
+
+                        Toast.makeText(
+                            requireContext(),
+                            "No se pudo actualizar el estatus",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+
+                dialog.dismiss()
+            }
+            .setNegativeButton(
+                "Cancelar",
+                null
+            )
+            .show()
+    }
+
+    private fun generarPdf(
+        orden: OrdenEntity
+    ) {
+
+        Toast.makeText(
+            requireContext(),
+            "Generando PDF...",
+            Toast.LENGTH_SHORT
+        ).show()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+
+            val resultado =
+                kotlinx.coroutines.withContext(
+                    kotlinx.coroutines.Dispatchers.IO
+                ) {
+                    OrdenPdfGenerator.generar(
+                        requireContext(),
+                        orden
+                    )
+                }
+
+            if (resultado != null) {
+
+                viewModel.marcarPdfGenerado(
+                    orden
+                )
+
+                Toast.makeText(
+                    requireContext(),
+                    "PDF generado en Descargas/MS Nexus",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                abrirPdf(resultado)
+
+            } else {
+
+                Toast.makeText(
+                    requireContext(),
+                    "No se pudo generar el PDF",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+    private fun abrirPdf(
+        resultado: String
+    ) {
+
+        try {
+
+            val uri: Uri
+
+            if (resultado.startsWith("content://")) {
+
+                uri = Uri.parse(resultado)
+
+            } else {
+
+                val file =
+                    File(resultado)
+
+                uri = FileProvider.getUriForFile(
+                    requireContext(),
+                    "${requireContext().packageName}.fileprovider",
+                    file
+                )
+            }
+
+            val intent =
+                Intent(Intent.ACTION_VIEW).apply {
+
+                    setDataAndType(
+                        uri,
+                        "application/pdf"
+                    )
+
+                    addFlags(
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+                }
+
+            startActivity(intent)
+
+        } catch (_: Exception) {
+
+            Toast.makeText(
+                requireContext(),
+                "PDF guardado. No hay una aplicación para abrirlo.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    private fun confirmarEliminacion(
+        orden: OrdenEntity
+    ) {
+
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Eliminar orden")
             .setMessage(
                 "¿Deseas eliminar ${orden.folio}?"
             )
-            .setNegativeButton("Cancelar", null)
-            .setPositiveButton("Eliminar") { _, _ ->
+            .setNegativeButton(
+                "Cancelar",
+                null
+            )
+            .setPositiveButton(
+                "Eliminar"
+            ) { _, _ ->
 
-                viewModel.eliminarOrden(orden)
+                viewModel.eliminarOrden(
+                    orden
+                )
 
                 Toast.makeText(
                     requireContext(),

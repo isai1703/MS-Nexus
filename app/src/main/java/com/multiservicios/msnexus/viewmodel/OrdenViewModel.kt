@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class OrdenViewModel(
     application: Application
@@ -63,7 +66,8 @@ class OrdenViewModel(
 
                 val subtotalReal = subtotal.coerceAtLeast(0.0)
                 val descuentoReal = descuento.coerceAtLeast(0.0)
-                val base = (subtotalReal - descuentoReal).coerceAtLeast(0.0)
+                val base =
+                    (subtotalReal - descuentoReal).coerceAtLeast(0.0)
 
                 val ivaReal = ivaPorcentaje.coerceAtLeast(0.0)
                 val ivaImporte = base * (ivaReal / 100.0)
@@ -71,10 +75,10 @@ class OrdenViewModel(
 
                 val orden = OrdenEntity(
                     folio = folio,
-                    fecha = java.text.SimpleDateFormat(
+                    fecha = SimpleDateFormat(
                         "dd/MM/yyyy",
-                        java.util.Locale.getDefault()
-                    ).format(java.util.Date()),
+                        Locale.getDefault()
+                    ).format(Date()),
                     numeroCliente = numeroCliente.trim(),
                     nombreCliente = nombreCliente.trim(),
                     empresa = empresa.trim(),
@@ -101,7 +105,69 @@ class OrdenViewModel(
         }
     }
 
-    fun eliminarOrden(orden: OrdenEntity) {
+    fun cambiarEstado(
+        orden: OrdenEntity,
+        nuevoEstado: String,
+        onResultado: (Boolean) -> Unit = {}
+    ) {
+        viewModelScope.launch {
+            try {
+
+                val ahora = System.currentTimeMillis()
+
+                val actualizada = when (nuevoEstado) {
+
+                    "Autorizada" -> orden.copy(
+                        estado = nuevoEstado,
+                        fechaAutorizacion =
+                            orden.fechaAutorizacion ?: ahora
+                    )
+
+                    "En proceso" -> orden.copy(
+                        estado = nuevoEstado,
+                        fechaInicio =
+                            orden.fechaInicio ?: ahora
+                    )
+
+                    "Finalizada" -> orden.copy(
+                        estado = nuevoEstado,
+                        fechaFinalizacion =
+                            orden.fechaFinalizacion ?: ahora
+                    )
+
+                    else -> orden.copy(
+                        estado = nuevoEstado
+                    )
+                }
+
+                repository.actualizar(actualizada)
+
+                onResultado(true)
+
+            } catch (_: Exception) {
+                onResultado(false)
+            }
+        }
+    }
+
+    fun marcarPdfGenerado(
+        orden: OrdenEntity
+    ) {
+        viewModelScope.launch {
+            try {
+                repository.actualizar(
+                    orden.copy(
+                        pdfGenerado = true
+                    )
+                )
+            } catch (_: Exception) {
+            }
+        }
+    }
+
+    fun eliminarOrden(
+        orden: OrdenEntity
+    ) {
         viewModelScope.launch {
             try {
                 repository.eliminar(orden)
