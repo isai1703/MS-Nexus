@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.MSNexus" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.MSNexus" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:statusBarColor">@android:color/white</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="colorPrimary">#1B4D91</item>
+        <item name="colorPrimaryVariant">#123A6D</item>
+        <item name="colorAccent">#1B4D91</item>
     </style>
 
 </resources>
