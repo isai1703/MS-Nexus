@@ -28,6 +28,22 @@ interface OrdenDao {
     @Query("SELECT * FROM ordenes WHERE id = :id LIMIT 1")
     fun observarPorId(id: Long): Flow<OrdenEntity?>
 
-    @Query("SELECT * FROM ordenes WHERE nombreCliente LIKE '%' || :texto || '%' OR empresa LIKE '%' || :texto || '%' OR numeroCliente LIKE '%' || :texto || '%' ORDER BY id DESC")
+    @Query("""
+        SELECT * FROM ordenes
+        WHERE nombreCliente LIKE '%' || :texto || '%'
+        OR empresa LIKE '%' || :texto || '%'
+        OR numeroCliente LIKE '%' || :texto || '%'
+        OR folio LIKE '%' || :texto || '%'
+        ORDER BY id DESC
+    """)
     fun buscar(texto: String): Flow<List<OrdenEntity>>
+
+    @Query("SELECT * FROM ordenes ORDER BY id DESC LIMIT 1")
+    suspend fun obtenerUltimaOrden(): OrdenEntity?
+
+    @Query("SELECT COUNT(*) FROM ordenes")
+    suspend fun contarOrdenes(): Int
+
+    @Query("SELECT * FROM ordenes WHERE estado = :estado ORDER BY id DESC")
+    fun obtenerPorEstado(estado: String): Flow<List<OrdenEntity>>
 }

@@ -9,6 +9,8 @@ data class OrdenEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
 
+    val folio: String,
+
     val fecha: String,
 
     val numeroCliente: String,
@@ -27,6 +29,8 @@ data class OrdenEntity(
 
     val descripcionTrabajo: String,
 
+    val fechaProgramada: String = "",
+
     val subtotal: Double,
 
     val descuento: Double,
@@ -38,6 +42,14 @@ data class OrdenEntity(
     val total: Double,
 
     val estado: String = "Pendiente",
+
+    val pdfGenerado: Boolean = false,
+
+    val fechaAutorizacion: Long? = null,
+
+    val fechaInicio: Long? = null,
+
+    val fechaFinalizacion: Long? = null,
 
     val fechaCreacion: Long = System.currentTimeMillis()
 )

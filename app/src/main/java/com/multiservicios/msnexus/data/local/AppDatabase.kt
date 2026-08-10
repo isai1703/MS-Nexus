@@ -6,13 +6,25 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [OrdenEntity::class],
-    version = 1,
+    entities = [
+        OrdenEntity::class,
+        ClienteEntity::class,
+        MaterialEntity::class,
+        OrdenMaterialEntity::class,
+        MovimientoInventarioEntity::class,
+        FolioEntity::class
+    ],
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun ordenDao(): OrdenDao
+    abstract fun clienteDao(): ClienteDao
+    abstract fun materialDao(): MaterialDao
+    abstract fun ordenMaterialDao(): OrdenMaterialDao
+    abstract fun movimientoInventarioDao(): MovimientoInventarioDao
+    abstract fun folioDao(): FolioDao
 
     companion object {
 
@@ -25,9 +37,12 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "ms_nexus_database"
-                ).build().also {
-                    INSTANCE = it
-                }
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
+                    .also {
+                        INSTANCE = it
+                    }
             }
         }
     }
