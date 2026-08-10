@@ -34,6 +34,10 @@ class ClienteViewModel(
     fun crearCliente(
         nombre: String,
         empresa: String,
+        rfc: String,
+        razonSocial: String,
+        codigoPostalFiscal: String,
+        regimenFiscal: String,
         telefono: String,
         correo: String,
         direccion: String,
@@ -49,11 +53,56 @@ class ClienteViewModel(
                 repository.crear(
                     nombre = nombre.trim(),
                     empresa = empresa.trim(),
+                    rfc = rfc.trim().uppercase(),
+                    razonSocial = razonSocial.trim(),
+                    codigoPostalFiscal = codigoPostalFiscal.trim(),
+                    regimenFiscal = regimenFiscal.trim(),
                     telefono = telefono.trim(),
                     correo = correo.trim(),
                     direccion = direccion.trim()
                 )
 
+                onResultado(true)
+
+            } catch (e: Exception) {
+                onResultado(false)
+            }
+        }
+    }
+
+    fun actualizarCliente(
+        cliente: ClienteEntity,
+        nombre: String,
+        empresa: String,
+        rfc: String,
+        razonSocial: String,
+        codigoPostalFiscal: String,
+        regimenFiscal: String,
+        telefono: String,
+        correo: String,
+        direccion: String,
+        onResultado: (Boolean) -> Unit
+    ) {
+        viewModelScope.launch {
+            try {
+                if (nombre.isBlank()) {
+                    onResultado(false)
+                    return@launch
+                }
+
+                val actualizado = cliente.copy(
+                    nombre = nombre.trim(),
+                    empresa = empresa.trim(),
+                    rfc = rfc.trim().uppercase(),
+                    razonSocial = razonSocial.trim(),
+                    codigoPostalFiscal = codigoPostalFiscal.trim(),
+                    regimenFiscal = regimenFiscal.trim(),
+                    telefono = telefono.trim(),
+                    correo = correo.trim(),
+                    direccion = direccion.trim()
+                )
+
+                repository.actualizar(actualizado)
                 onResultado(true)
 
             } catch (e: Exception) {

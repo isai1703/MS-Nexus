@@ -19,6 +19,10 @@ class ClienteRepository(
     suspend fun crear(
         nombre: String,
         empresa: String,
+        rfc: String,
+        razonSocial: String,
+        codigoPostalFiscal: String,
+        regimenFiscal: String,
         telefono: String,
         correo: String,
         direccion: String
@@ -31,6 +35,10 @@ class ClienteRepository(
                 numeroCliente = numeroCliente,
                 nombre = nombre,
                 empresa = empresa,
+                rfc = rfc,
+                razonSocial = razonSocial,
+                codigoPostalFiscal = codigoPostalFiscal,
+                regimenFiscal = regimenFiscal,
                 telefono = telefono,
                 correo = correo,
                 direccion = direccion

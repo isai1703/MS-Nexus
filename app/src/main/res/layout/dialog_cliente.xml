@@ -16,28 +16,57 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nombre del cliente *"
-            android:inputType="textCapWords"/>
+            android:inputType="textCapWords" />
 
         <EditText
             android:id="@+id/etEmpresa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Empresa / negocio"
-            android:inputType="textCapWords"/>
+            android:inputType="textCapWords" />
+
+        <EditText
+            android:id="@+id/etRfc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="RFC"
+            android:inputType="textCapCharacters" />
+
+        <EditText
+            android:id="@+id/etRazonSocial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Razón social"
+            android:inputType="textCapWords" />
+
+        <EditText
+            android:id="@+id/etCodigoPostalFiscal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Código postal fiscal"
+            android:inputType="number"
+            android:maxLength="5" />
+
+        <EditText
+            android:id="@+id/etRegimenFiscal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Régimen fiscal"
+            android:inputType="text" />
 
         <EditText
             android:id="@+id/etTelefono"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Teléfono"
-            android:inputType="phone"/>
+            android:inputType="phone" />
 
         <EditText
             android:id="@+id/etCorreo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Correo electrónico"
-            android:inputType="textEmailAddress"/>
+            android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/etDireccion"
@@ -45,7 +74,7 @@
             android:layout_height="wrap_content"
             android:hint="Dirección"
             android:inputType="textCapSentences"
-            android:minLines="2"/>
+            android:minLines="2" />
 
     </LinearLayout>
 

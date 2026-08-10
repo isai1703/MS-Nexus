@@ -91,6 +91,20 @@ class ClientesFragment : Fragment() {
 
     private fun mostrarFormulario() {
 
+        mostrarDialogoCliente(
+            cliente = null
+        )
+    }
+
+    private fun editarCliente(cliente: ClienteEntity) {
+
+        mostrarDialogoCliente(
+            cliente = cliente
+        )
+    }
+
+    private fun mostrarDialogoCliente(cliente: ClienteEntity?) {
+
         val dialogView = layoutInflater.inflate(
             R.layout.dialog_cliente,
             null
@@ -102,6 +116,22 @@ class ClientesFragment : Fragment() {
         val etEmpresa =
             dialogView.findViewById<EditText>(R.id.etEmpresa)
 
+        val etRfc =
+            dialogView.findViewById<EditText>(R.id.etRfc)
+
+        val etRazonSocial =
+            dialogView.findViewById<EditText>(R.id.etRazonSocial)
+
+        val etCodigoPostalFiscal =
+            dialogView.findViewById<EditText>(
+                R.id.etCodigoPostalFiscal
+            )
+
+        val etRegimenFiscal =
+            dialogView.findViewById<EditText>(
+                R.id.etRegimenFiscal
+            )
+
         val etTelefono =
             dialogView.findViewById<EditText>(R.id.etTelefono)
 
@@ -111,35 +141,101 @@ class ClientesFragment : Fragment() {
         val etDireccion =
             dialogView.findViewById<EditText>(R.id.etDireccion)
 
+        if (cliente != null) {
+
+            etNombre.setText(cliente.nombre)
+            etEmpresa.setText(cliente.empresa)
+            etRfc.setText(cliente.rfc)
+            etRazonSocial.setText(cliente.razonSocial)
+            etCodigoPostalFiscal.setText(cliente.codigoPostalFiscal)
+            etRegimenFiscal.setText(cliente.regimenFiscal)
+            etTelefono.setText(cliente.telefono)
+            etCorreo.setText(cliente.correo)
+            etDireccion.setText(cliente.direccion)
+        }
+
+        val titulo =
+            if (cliente == null) {
+                "Nuevo cliente"
+            } else {
+                "Editar ${cliente.numeroCliente}"
+            }
+
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Nuevo cliente")
+            .setTitle(titulo)
             .setView(dialogView)
             .setNegativeButton("Cancelar", null)
-            .setPositiveButton("Guardar") { _, _ ->
+            .setPositiveButton(
+                if (cliente == null) "Guardar" else "Actualizar"
+            ) { _, _ ->
 
-                viewModel.crearCliente(
-                    nombre = etNombre.text.toString(),
-                    empresa = etEmpresa.text.toString(),
-                    telefono = etTelefono.text.toString(),
-                    correo = etCorreo.text.toString(),
-                    direccion = etDireccion.text.toString()
-                ) { correcto ->
+                if (cliente == null) {
 
-                    if (correcto) {
+                    viewModel.crearCliente(
+                        nombre = etNombre.text.toString(),
+                        empresa = etEmpresa.text.toString(),
+                        rfc = etRfc.text.toString(),
+                        razonSocial = etRazonSocial.text.toString(),
+                        codigoPostalFiscal =
+                            etCodigoPostalFiscal.text.toString(),
+                        regimenFiscal =
+                            etRegimenFiscal.text.toString(),
+                        telefono = etTelefono.text.toString(),
+                        correo = etCorreo.text.toString(),
+                        direccion = etDireccion.text.toString()
+                    ) { correcto ->
 
-                        Toast.makeText(
-                            requireContext(),
-                            "Cliente registrado correctamente",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        if (correcto) {
 
-                    } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "Cliente registrado correctamente",
+                                Toast.LENGTH_SHORT
+                            ).show()
 
-                        Toast.makeText(
-                            requireContext(),
-                            "El nombre del cliente es obligatorio",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        } else {
+
+                            Toast.makeText(
+                                requireContext(),
+                                "El nombre del cliente es obligatorio",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
+                } else {
+
+                    viewModel.actualizarCliente(
+                        cliente = cliente,
+                        nombre = etNombre.text.toString(),
+                        empresa = etEmpresa.text.toString(),
+                        rfc = etRfc.text.toString(),
+                        razonSocial = etRazonSocial.text.toString(),
+                        codigoPostalFiscal =
+                            etCodigoPostalFiscal.text.toString(),
+                        regimenFiscal =
+                            etRegimenFiscal.text.toString(),
+                        telefono = etTelefono.text.toString(),
+                        correo = etCorreo.text.toString(),
+                        direccion = etDireccion.text.toString()
+                    ) { correcto ->
+
+                        if (correcto) {
+
+                            Toast.makeText(
+                                requireContext(),
+                                "Cliente actualizado correctamente",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                        } else {
+
+                            Toast.makeText(
+                                requireContext(),
+                                "El nombre del cliente es obligatorio",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
             }
@@ -153,40 +249,71 @@ class ClientesFragment : Fragment() {
             .setItems(
                 arrayOf(
                     "Número: ${cliente.numeroCliente}",
-                    "Empresa: ${
-                        cliente.empresa.ifBlank {
-                            "Particular"
-                        }
-                    }",
-                    "Teléfono: ${
-                        cliente.telefono.ifBlank {
-                            "Sin teléfono"
-                        }
-                    }",
+                    "Editar cliente",
+                    "Ver datos fiscales",
                     "Eliminar cliente"
                 )
             ) { _, opcion ->
 
-                if (opcion == 3) {
+                when (opcion) {
 
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Eliminar cliente")
-                        .setMessage(
-                            "¿Deseas eliminar a ${cliente.nombre}?"
-                        )
-                        .setNegativeButton("Cancelar", null)
-                        .setPositiveButton("Eliminar") { _, _ ->
+                    1 -> editarCliente(cliente)
 
-                            viewModel.eliminarCliente(cliente)
+                    2 -> mostrarDatosFiscales(cliente)
 
-                            Toast.makeText(
-                                requireContext(),
-                                "Cliente eliminado",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        .show()
+                    3 -> confirmarEliminar(cliente)
                 }
+            }
+            .show()
+    }
+
+    private fun mostrarDatosFiscales(cliente: ClienteEntity) {
+
+        val rfc =
+            cliente.rfc.ifBlank { "No registrado" }
+
+        val razonSocial =
+            cliente.razonSocial.ifBlank { "No registrada" }
+
+        val codigoPostal =
+            cliente.codigoPostalFiscal.ifBlank { "No registrado" }
+
+        val regimen =
+            cliente.regimenFiscal.ifBlank { "No registrado" }
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Datos fiscales")
+            .setMessage(
+                "Cliente: ${cliente.numeroCliente}\n\n" +
+                    "RFC: $rfc\n" +
+                    "Razón social: $razonSocial\n" +
+                    "Código postal fiscal: $codigoPostal\n" +
+                    "Régimen fiscal: $regimen\n\n" +
+                    "Estos datos se almacenan únicamente " +
+                    "como información del cliente."
+            )
+            .setPositiveButton("Cerrar", null)
+            .show()
+    }
+
+    private fun confirmarEliminar(cliente: ClienteEntity) {
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Eliminar cliente")
+            .setMessage(
+                "¿Deseas eliminar a ${cliente.nombre} " +
+                    "(${cliente.numeroCliente})?"
+            )
+            .setNegativeButton("Cancelar", null)
+            .setPositiveButton("Eliminar") { _, _ ->
+
+                viewModel.eliminarCliente(cliente)
+
+                Toast.makeText(
+                    requireContext(),
+                    "Cliente eliminado",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             .show()
     }
