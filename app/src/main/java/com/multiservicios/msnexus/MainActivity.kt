@@ -1,22 +1,27 @@
 package com.multiservicios.msnexus
 
-import android.graphics.Color
 import android.os.Bundle
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.multiservicios.msnexus.databinding.ActivityMainBinding
+import com.multiservicios.msnexus.ui.dashboard.DashboardFragment
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val textView = TextView(this).apply {
-            text = "MS NEXUS\n\nMainActivity funcionando correctamente"
-            textSize = 24f
-            setTextColor(Color.BLACK)
-            setPadding(48, 48, 48, 48)
-        }
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        setContentView(textView)
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(
+                    R.id.main_container,
+                    DashboardFragment()
+                )
+                .commit()
+        }
     }
 }
