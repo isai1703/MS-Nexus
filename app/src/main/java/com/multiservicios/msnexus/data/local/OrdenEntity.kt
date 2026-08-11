@@ -51,5 +51,7 @@ data class OrdenEntity(
 
     val fechaFinalizacion: Long? = null,
 
-    val fechaCreacion: Long = System.currentTimeMillis()
+    val fechaCreacion: Long = System.currentTimeMillis(),
+
+    val disenoAprobado: String? = null
 )

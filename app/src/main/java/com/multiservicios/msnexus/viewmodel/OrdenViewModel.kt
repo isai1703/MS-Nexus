@@ -48,10 +48,14 @@ class OrdenViewModel(
         subtotal: Double,
         descuento: Double,
         ivaPorcentaje: Double,
+        disenoAprobado: String? = null,
         onResultado: (Boolean) -> Unit
     ) {
+
         viewModelScope.launch {
+
             try {
+
                 if (nombreCliente.isBlank()) {
                     onResultado(false)
                     return@launch
@@ -62,37 +66,81 @@ class OrdenViewModel(
                     return@launch
                 }
 
-                val folio = folioRepository.siguienteOrden()
+                val folio =
+                    folioRepository.siguienteOrden()
 
-                val subtotalReal = subtotal.coerceAtLeast(0.0)
-                val descuentoReal = descuento.coerceAtLeast(0.0)
+                val subtotalReal =
+                    subtotal.coerceAtLeast(0.0)
+
+                val descuentoReal =
+                    descuento.coerceAtLeast(0.0)
+
                 val base =
-                    (subtotalReal - descuentoReal).coerceAtLeast(0.0)
+                    (subtotalReal - descuentoReal)
+                        .coerceAtLeast(0.0)
 
-                val ivaReal = ivaPorcentaje.coerceAtLeast(0.0)
-                val ivaImporte = base * (ivaReal / 100.0)
-                val total = base + ivaImporte
+                val ivaReal =
+                    ivaPorcentaje.coerceAtLeast(0.0)
+
+                val ivaImporte =
+                    base * (ivaReal / 100.0)
+
+                val total =
+                    base + ivaImporte
 
                 val orden = OrdenEntity(
+
                     folio = folio,
+
                     fecha = SimpleDateFormat(
                         "dd/MM/yyyy",
                         Locale.getDefault()
                     ).format(Date()),
-                    numeroCliente = numeroCliente.trim(),
-                    nombreCliente = nombreCliente.trim(),
-                    empresa = empresa.trim(),
-                    telefono = telefono.trim(),
-                    correo = correo.trim(),
-                    direccion = direccion.trim(),
-                    tipoTrabajo = tipoTrabajo.trim(),
-                    descripcionTrabajo = descripcionTrabajo.trim(),
-                    fechaProgramada = fechaProgramada.trim(),
-                    subtotal = subtotalReal,
-                    descuento = descuentoReal,
-                    ivaPorcentaje = ivaReal,
-                    ivaImporte = ivaImporte,
-                    total = total
+
+                    numeroCliente =
+                        numeroCliente.trim(),
+
+                    nombreCliente =
+                        nombreCliente.trim(),
+
+                    empresa =
+                        empresa.trim(),
+
+                    telefono =
+                        telefono.trim(),
+
+                    correo =
+                        correo.trim(),
+
+                    direccion =
+                        direccion.trim(),
+
+                    tipoTrabajo =
+                        tipoTrabajo.trim(),
+
+                    descripcionTrabajo =
+                        descripcionTrabajo.trim(),
+
+                    fechaProgramada =
+                        fechaProgramada.trim(),
+
+                    subtotal =
+                        subtotalReal,
+
+                    descuento =
+                        descuentoReal,
+
+                    ivaPorcentaje =
+                        ivaReal,
+
+                    ivaImporte =
+                        ivaImporte,
+
+                    total =
+                        total,
+
+                    disenoAprobado =
+                        disenoAprobado
                 )
 
                 repository.insertar(orden)
@@ -100,6 +148,7 @@ class OrdenViewModel(
                 onResultado(true)
 
             } catch (_: Exception) {
+
                 onResultado(false)
             }
         }
@@ -110,41 +159,55 @@ class OrdenViewModel(
         nuevoEstado: String,
         onResultado: (Boolean) -> Unit = {}
     ) {
+
         viewModelScope.launch {
+
             try {
 
-                val ahora = System.currentTimeMillis()
+                val ahora =
+                    System.currentTimeMillis()
 
-                val actualizada = when (nuevoEstado) {
+                val actualizada =
+                    when (nuevoEstado) {
 
-                    "Autorizada" -> orden.copy(
-                        estado = nuevoEstado,
-                        fechaAutorizacion =
-                            orden.fechaAutorizacion ?: ahora
-                    )
+                        "Autorizada" ->
+                            orden.copy(
+                                estado = nuevoEstado,
+                                fechaAutorizacion =
+                                    orden.fechaAutorizacion
+                                        ?: ahora
+                            )
 
-                    "En proceso" -> orden.copy(
-                        estado = nuevoEstado,
-                        fechaInicio =
-                            orden.fechaInicio ?: ahora
-                    )
+                        "En proceso" ->
+                            orden.copy(
+                                estado = nuevoEstado,
+                                fechaInicio =
+                                    orden.fechaInicio
+                                        ?: ahora
+                            )
 
-                    "Finalizada" -> orden.copy(
-                        estado = nuevoEstado,
-                        fechaFinalizacion =
-                            orden.fechaFinalizacion ?: ahora
-                    )
+                        "Finalizada" ->
+                            orden.copy(
+                                estado = nuevoEstado,
+                                fechaFinalizacion =
+                                    orden.fechaFinalizacion
+                                        ?: ahora
+                            )
 
-                    else -> orden.copy(
-                        estado = nuevoEstado
-                    )
-                }
+                        else ->
+                            orden.copy(
+                                estado = nuevoEstado
+                            )
+                    }
 
-                repository.actualizar(actualizada)
+                repository.actualizar(
+                    actualizada
+                )
 
                 onResultado(true)
 
             } catch (_: Exception) {
+
                 onResultado(false)
             }
         }
@@ -153,13 +216,17 @@ class OrdenViewModel(
     fun marcarPdfGenerado(
         orden: OrdenEntity
     ) {
+
         viewModelScope.launch {
+
             try {
+
                 repository.actualizar(
                     orden.copy(
                         pdfGenerado = true
                     )
                 )
+
             } catch (_: Exception) {
             }
         }
@@ -168,9 +235,15 @@ class OrdenViewModel(
     fun eliminarOrden(
         orden: OrdenEntity
     ) {
+
         viewModelScope.launch {
+
             try {
-                repository.eliminar(orden)
+
+                repository.eliminar(
+                    orden
+                )
+
             } catch (_: Exception) {
             }
         }
