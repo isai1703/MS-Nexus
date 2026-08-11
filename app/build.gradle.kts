@@ -12,15 +12,34 @@ android {
         applicationId = "com.multiservicios.msnexus"
         minSdk = 26
         targetSdk = 35
+
         versionCode = 1
         versionName = "1.0"
+    }
+
+    signingConfigs {
+        create("release") {
+            val keystorePath = System.getenv("MS_NEXUS_KEYSTORE_PATH")
+
+            if (!keystorePath.isNullOrBlank()) {
+                storeFile = file(keystorePath)
+                storePassword = System.getenv("MS_NEXUS_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("MS_NEXUS_KEY_ALIAS")
+                keyPassword = System.getenv("MS_NEXUS_KEY_PASSWORD")
+            }
+        }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
+
+            signingConfig = signingConfigs.getByName("release")
+
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
+                getDefaultProguardFile(
+                    "proguard-android-optimize.txt"
+                ),
                 "proguard-rules.pro"
             )
         }
