@@ -2,13 +2,11 @@ package com.multiservicios.msnexus.util
 
 import android.content.ContentValues
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.pdf.PdfDocument
-import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
@@ -33,10 +31,6 @@ object OrdenPdfGenerator {
 
             val document = PdfDocument()
 
-            // ============================================================
-            // PÁGINA 1 - ORDEN DE TRABAJO
-            // ============================================================
-
             val pageInfo =
                 PdfDocument.PageInfo.Builder(
                     PAGE_WIDTH,
@@ -44,7 +38,9 @@ object OrdenPdfGenerator {
                     1
                 ).create()
 
-            val page = document.startPage(pageInfo)
+            val page =
+                document.startPage(pageInfo)
+
             val canvas = page.canvas
 
             val black = android.graphics.Color.rgb(25, 25, 25)
@@ -798,23 +794,6 @@ object OrdenPdfGenerator {
 
             document.finishPage(page)
 
-            // ============================================================
-            // PÁGINA 2 - DISEÑO DEL CLIENTE
-            // ============================================================
-
-            if (orden.disenoUri.isNotBlank()) {
-
-                agregarPaginaDiseno(
-                    context,
-                    document,
-                    orden
-                )
-            }
-
-            // ============================================================
-            // GUARDAR PDF
-            // ============================================================
-
             val fileName = "${orden.folio}.pdf"
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -940,181 +919,6 @@ object OrdenPdfGenerator {
         }
     }
 
-    private fun agregarPaginaDiseno(
-        context: Context,
-        document: PdfDocument,
-        orden: OrdenEntity
-    ) {
-
-        try {
-
-            val uri = Uri.parse(orden.disenoUri)
-
-            val bitmap =
-                context.contentResolver
-                    .openInputStream(uri)
-                    ?.use { input ->
-                        BitmapFactory.decodeStream(input)
-                    }
-
-            if (bitmap == null) {
-                return
-            }
-
-            val pageNumber = 2
-
-            val pageInfo =
-                PdfDocument.PageInfo.Builder(
-                    PAGE_WIDTH,
-                    PAGE_HEIGHT,
-                    pageNumber
-                ).create()
-
-            val page =
-                document.startPage(pageInfo)
-
-            val canvas =
-                page.canvas
-
-            val black =
-                android.graphics.Color.rgb(
-                    25,
-                    25,
-                    25
-                )
-
-            val gray =
-                android.graphics.Color.rgb(
-                    90,
-                    90,
-                    90
-                )
-
-            val lightGray =
-                android.graphics.Color.rgb(
-                    235,
-                    235,
-                    235
-                )
-
-            val titlePaint =
-                Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                    color = black
-                    textSize = 16f
-                    typeface =
-                        android.graphics.Typeface.DEFAULT_BOLD
-                }
-
-            val smallPaint =
-                Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                    color = gray
-                    textSize = 8f
-                }
-
-            // Encabezado
-
-            canvas.drawText(
-                "DISEÑO APROBADO POR EL CLIENTE",
-                MARGIN,
-                38f,
-                titlePaint
-            )
-
-            canvas.drawText(
-                "Folio: ${orden.folio}",
-                MARGIN,
-                55f,
-                smallPaint
-            )
-
-            canvas.drawText(
-                orden.nombreCliente,
-                300f,
-                55f,
-                smallPaint
-            )
-
-            val availableLeft = MARGIN
-            val availableTop = 75f
-            val availableRight =
-                PAGE_WIDTH - MARGIN
-            val availableBottom =
-                PAGE_HEIGHT - 65f
-
-            val availableWidth =
-                availableRight - availableLeft
-
-            val availableHeight =
-                availableBottom - availableTop
-
-            val scale =
-                minOf(
-                    availableWidth /
-                        bitmap.width.toFloat(),
-                    availableHeight /
-                        bitmap.height.toFloat()
-                )
-
-            val drawWidth =
-                bitmap.width * scale
-
-            val drawHeight =
-                bitmap.height * scale
-
-            val left =
-                availableLeft +
-                    (availableWidth - drawWidth) / 2f
-
-            val top =
-                availableTop +
-                    (availableHeight - drawHeight) / 2f
-
-            val rect =
-                RectF(
-                    left,
-                    top,
-                    left + drawWidth,
-                    top + drawHeight
-                )
-
-            val borderPaint =
-                Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                    color = lightGray
-                    style = Paint.Style.STROKE
-                    strokeWidth = 1f
-                }
-
-            canvas.drawRect(
-                rect,
-                borderPaint
-            )
-
-            canvas.drawBitmap(
-                bitmap,
-                null,
-                rect,
-                Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                    isFilterBitmap = true
-                }
-            )
-
-            canvas.drawText(
-                "Diseño adjunto a la orden de trabajo",
-                MARGIN,
-                PAGE_HEIGHT - 30f,
-                smallPaint
-            )
-
-            document.finishPage(page)
-
-            bitmap.recycle()
-
-        } catch (_: Exception) {
-            // Si la imagen no puede abrirse, el PDF principal
-            // continúa generándose normalmente.
-        }
-    }
-
     private fun drawSectionTitle(
         canvas: Canvas,
         title: String,
@@ -1224,8 +1028,9 @@ object OrdenPdfGenerator {
     ): List<String> {
 
         val palabras =
-            texto.trim()
-                .split(Regex("\\s+"))
+            texto.trim().split(
+                Regex("\\s+")
+            )
 
         val lineas =
             mutableListOf<String>()
@@ -1281,8 +1086,7 @@ object OrdenPdfGenerator {
     ): String {
 
         return if (
-            value ==
-            value.toLong().toDouble()
+            value == value.toLong().toDouble()
         ) {
 
             value.toLong().toString()
