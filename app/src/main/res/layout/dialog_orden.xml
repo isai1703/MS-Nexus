@@ -1,194 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="360dp"
-    android:fillViewport="true">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp">
-
-        <EditText
-            android:id="@+id/etTipoTrabajo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Tipo de trabajo *"
-            android:inputType="textCapSentences" />
-
-        <EditText
-            android:id="@+id/etDescripcionTrabajo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Descripción del trabajo"
-            android:inputType="textCapSentences|textMultiLine"
-            android:minLines="3"
-            android:gravity="top" />
-
-        <EditText
-            android:id="@+id/etFechaProgramada"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Fecha programada"
-            android:inputType="text" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:layout_marginBottom="6dp"
-            android:text="Especificaciones técnicas"
-            android:textSize="17sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/etTipoElemento"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Elemento: puerta, portón, ventana, escalera..."
-            android:inputType="textCapSentences" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Medidas"
-            android:textStyle="bold"
-            android:layout_marginTop="10dp" />
+        android:layout_height="360dp"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="8dp">
 
             <EditText
-                android:id="@+id/etAlto"
-                android:layout_width="0dp"
+                android:id="@+id/etTipoTrabajo"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="4dp"
-                android:hint="Alto"
+                android:hint="Tipo de trabajo *"
+                android:inputType="textCapSentences" />
+
+            <EditText
+                android:id="@+id/etDescripcionTrabajo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Descripción del trabajo"
+                android:inputType="textCapSentences|textMultiLine"
+                android:minLines="3"
+                android:gravity="top" />
+
+            <EditText
+                android:id="@+id/etFechaProgramada"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Fecha programada"
+                android:inputType="text" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="6dp"
+                android:text="Especificaciones técnicas"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etTipoElemento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Elemento: puerta, portón, ventana, escalera..."
+                android:inputType="textCapSentences" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Medidas"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/etAlto"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="4dp"
+                    android:hint="Alto"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/etAncho"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:hint="Ancho"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/etLargo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:hint="Largo"
+                    android:inputType="numberDecimal" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Medidas en metros. Usa largo/profundidad cuando aplique."
+                android:textSize="12sp"
+                android:layout_marginTop="2dp" />
+
+            <EditText
+                android:id="@+id/etCantidad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Cantidad"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/etMaterial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Material: aluminio, PTR, C-100, lámina, acrílico..."
+                android:inputType="textCapSentences" />
+
+            <EditText
+                android:id="@+id/etPerfilCalibre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Perfil / calibre: PTR 1x1, C-100, calibre 18..."
+                android:inputType="textCapSentences" />
+
+            <EditText
+                android:id="@+id/etAcabado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Acabado: pintura, galvanizado, anodizado..."
+                android:inputType="textCapSentences" />
+
+            <EditText
+                android:id="@+id/etColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Color"
+                android:inputType="textCapWords" />
+
+            <EditText
+                android:id="@+id/etObservacionesTecnicas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Observaciones técnicas"
+                android:inputType="textCapSentences|textMultiLine"
+                android:minLines="3"
+                android:gravity="top" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="6dp"
+                android:text="Diseño aprobado por el cliente"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnSeleccionarDiseno"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Agregar diseño"
+                android:textAllCaps="false" />
+
+            <TextView
+                android:id="@+id/tvDisenoSeleccionado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="Sin diseño adjunto"
+                android:textSize="13sp" />
+
+            <EditText
+                android:id="@+id/etSubtotal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Subtotal"
                 android:inputType="numberDecimal" />
 
             <EditText
-                android:id="@+id/etAncho"
-                android:layout_width="0dp"
+                android:id="@+id/etDescuento"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:hint="Ancho"
+                android:hint="Descuento"
                 android:inputType="numberDecimal" />
 
             <EditText
-                android:id="@+id/etLargo"
-                android:layout_width="0dp"
+                android:id="@+id/etIva"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="4dp"
-                android:hint="Largo"
+                android:hint="IVA %"
                 android:inputType="numberDecimal" />
 
         </LinearLayout>
+    </ScrollView>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Medidas en metros. Usa largo/profundidad cuando aplique."
-            android:textSize="12sp"
-            android:layout_marginTop="2dp" />
-
-        <EditText
-            android:id="@+id/etCantidad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Cantidad"
-            android:inputType="number" />
-
-        <EditText
-            android:id="@+id/etMaterial"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Material: aluminio, PTR, C-100, lámina, acrílico..."
-            android:inputType="textCapSentences" />
-
-        <EditText
-            android:id="@+id/etPerfilCalibre"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Perfil / calibre: PTR 1x1, C-100, calibre 18..."
-            android:inputType="textCapSentences" />
-
-        <EditText
-            android:id="@+id/etAcabado"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Acabado: pintura, galvanizado, anodizado..."
-            android:inputType="textCapSentences" />
-
-        <EditText
-            android:id="@+id/etColor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Color"
-            android:inputType="textCapWords" />
-
-        <EditText
-            android:id="@+id/etObservacionesTecnicas"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Observaciones técnicas"
-            android:inputType="textCapSentences|textMultiLine"
-            android:minLines="3"
-            android:gravity="top" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:layout_marginBottom="6dp"
-            android:text="Diseño aprobado por el cliente"
-            android:textSize="17sp"
-            android:textStyle="bold" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end|center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp">
 
         <Button
-            android:id="@+id/btnSeleccionarDiseno"
-            android:layout_width="match_parent"
+            android:id="@+id/btnCancelar"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Agregar diseño"
+            android:text="Cancelar"
             android:textAllCaps="false" />
 
-        <TextView
-            android:id="@+id/tvDisenoSeleccionado"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/btnCrearOrden"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:text="Sin diseño adjunto"
-            android:textSize="13sp" />
-
-        <EditText
-            android:id="@+id/etSubtotal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Subtotal"
-            android:inputType="numberDecimal" />
-
-        <EditText
-            android:id="@+id/etDescuento"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Descuento"
-            android:inputType="numberDecimal" />
-
-        <EditText
-            android:id="@+id/etIva"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="IVA %"
-            android:inputType="numberDecimal" />
+            android:layout_marginStart="8dp"
+            android:text="Crear orden"
+            android:textAllCaps="false" />
 
     </LinearLayout>
 
-</ScrollView>
+</LinearLayout>

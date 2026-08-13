@@ -463,7 +463,12 @@ class OrdenesFragment : Fragment() {
                     }
                 }
             }
-            .show()
+            .show().also { dialog ->
+                dialog.window?.setLayout(
+                    (resources.displayMetrics.widthPixels * 0.95).toInt(),
+                    (resources.displayMetrics.heightPixels * 0.85).toInt()
+                )
+            }
     }
 
     private fun obtenerNombreArchivo(
