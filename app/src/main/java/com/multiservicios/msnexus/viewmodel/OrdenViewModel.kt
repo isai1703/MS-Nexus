@@ -48,7 +48,19 @@ class OrdenViewModel(
         subtotal: Double,
         descuento: Double,
         ivaPorcentaje: Double,
-        disenoAprobado: String? = null,
+
+        tipoElemento: String = "",
+        alto: Double = 0.0,
+        ancho: Double = 0.0,
+        largo: Double = 0.0,
+        cantidad: Int = 0,
+        material: String = "",
+        perfilCalibre: String = "",
+        acabado: String = "",
+        color: String = "",
+        observacionesTecnicas: String = "",
+        disenoUri: String = "",
+
         onResultado: (Boolean) -> Unit
     ) {
 
@@ -92,10 +104,11 @@ class OrdenViewModel(
 
                     folio = folio,
 
-                    fecha = SimpleDateFormat(
-                        "dd/MM/yyyy",
-                        Locale.getDefault()
-                    ).format(Date()),
+                    fecha =
+                        SimpleDateFormat(
+                            "dd/MM/yyyy",
+                            Locale.getDefault()
+                        ).format(Date()),
 
                     numeroCliente =
                         numeroCliente.trim(),
@@ -139,8 +152,38 @@ class OrdenViewModel(
                     total =
                         total,
 
-                    disenoAprobado =
-                        disenoAprobado
+                    tipoElemento =
+                        tipoElemento.trim(),
+
+                    alto =
+                        alto.coerceAtLeast(0.0),
+
+                    ancho =
+                        ancho.coerceAtLeast(0.0),
+
+                    largo =
+                        largo.coerceAtLeast(0.0),
+
+                    cantidad =
+                        cantidad.coerceAtLeast(0),
+
+                    material =
+                        material.trim(),
+
+                    perfilCalibre =
+                        perfilCalibre.trim(),
+
+                    acabado =
+                        acabado.trim(),
+
+                    color =
+                        color.trim(),
+
+                    observacionesTecnicas =
+                        observacionesTecnicas.trim(),
+
+                    disenoUri =
+                        disenoUri.trim()
                 )
 
                 repository.insertar(orden)
@@ -200,9 +243,7 @@ class OrdenViewModel(
                             )
                     }
 
-                repository.actualizar(
-                    actualizada
-                )
+                repository.actualizar(actualizada)
 
                 onResultado(true)
 
@@ -240,9 +281,7 @@ class OrdenViewModel(
 
             try {
 
-                repository.eliminar(
-                    orden
-                )
+                repository.eliminar(orden)
 
             } catch (_: Exception) {
             }

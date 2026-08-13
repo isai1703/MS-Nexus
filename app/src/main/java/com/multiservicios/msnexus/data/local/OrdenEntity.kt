@@ -53,5 +53,27 @@ data class OrdenEntity(
 
     val fechaCreacion: Long = System.currentTimeMillis(),
 
-    val disenoAprobado: String? = null
+    // Especificaciones técnicas
+    val tipoElemento: String = "",
+
+    val alto: Double = 0.0,
+
+    val ancho: Double = 0.0,
+
+    val largo: Double = 0.0,
+
+    val cantidad: Int = 0,
+
+    val material: String = "",
+
+    val perfilCalibre: String = "",
+
+    val acabado: String = "",
+
+    val color: String = "",
+
+    val observacionesTecnicas: String = "",
+
+    // Diseño autorizado por el cliente
+    val disenoUri: String = ""
 )

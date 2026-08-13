@@ -30,22 +30,60 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
 
-        @Volatile
-        private var INSTANCE: AppDatabase? = null
-
         private val MIGRATION_3_4 = object : Migration(3, 4) {
 
             override fun migrate(
                 database: SupportSQLiteDatabase
             ) {
+
                 database.execSQL(
-                    """
-                    ALTER TABLE ordenes
-                    ADD COLUMN disenoAprobado TEXT
-                    """
+                    "ALTER TABLE ordenes ADD COLUMN tipoElemento TEXT NOT NULL DEFAULT ''"
+                )
+
+                database.execSQL(
+                    "ALTER TABLE ordenes ADD COLUMN alto REAL NOT NULL DEFAULT 0.0"
+                )
+
+                database.execSQL(
+                    "ALTER TABLE ordenes ADD COLUMN ancho REAL NOT NULL DEFAULT 0.0"
+                )
+
+                database.execSQL(
+                    "ALTER TABLE ordenes ADD COLUMN largo REAL NOT NULL DEFAULT 0.0"
+                )
+
+                database.execSQL(
+                    "ALTER TABLE ordenes ADD COLUMN cantidad INTEGER NOT NULL DEFAULT 0"
+                )
+
+                database.execSQL(
+                    "ALTER TABLE ordenes ADD COLUMN material TEXT NOT NULL DEFAULT ''"
+                )
+
+                database.execSQL(
+                    "ALTER TABLE ordenes ADD COLUMN perfilCalibre TEXT NOT NULL DEFAULT ''"
+                )
+
+                database.execSQL(
+                    "ALTER TABLE ordenes ADD COLUMN acabado TEXT NOT NULL DEFAULT ''"
+                )
+
+                database.execSQL(
+                    "ALTER TABLE ordenes ADD COLUMN color TEXT NOT NULL DEFAULT ''"
+                )
+
+                database.execSQL(
+                    "ALTER TABLE ordenes ADD COLUMN observacionesTecnicas TEXT NOT NULL DEFAULT ''"
+                )
+
+                database.execSQL(
+                    "ALTER TABLE ordenes ADD COLUMN disenoUri TEXT NOT NULL DEFAULT ''"
                 )
             }
         }
+
+        @Volatile
+        private var INSTANCE: AppDatabase? = null
 
         fun getInstance(context: Context): AppDatabase {
 
