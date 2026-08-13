@@ -48,7 +48,6 @@ class OrdenViewModel(
         subtotal: Double,
         descuento: Double,
         ivaPorcentaje: Double,
-
         tipoElemento: String = "",
         alto: Double = 0.0,
         ancho: Double = 0.0,
@@ -60,7 +59,6 @@ class OrdenViewModel(
         color: String = "",
         observacionesTecnicas: String = "",
         disenoUri: String = "",
-
         onResultado: (Boolean) -> Unit
     ) {
 
@@ -217,24 +215,21 @@ class OrdenViewModel(
                             orden.copy(
                                 estado = nuevoEstado,
                                 fechaAutorizacion =
-                                    orden.fechaAutorizacion
-                                        ?: ahora
+                                    orden.fechaAutorizacion ?: ahora
                             )
 
                         "En proceso" ->
                             orden.copy(
                                 estado = nuevoEstado,
                                 fechaInicio =
-                                    orden.fechaInicio
-                                        ?: ahora
+                                    orden.fechaInicio ?: ahora
                             )
 
                         "Finalizada" ->
                             orden.copy(
                                 estado = nuevoEstado,
                                 fechaFinalizacion =
-                                    orden.fechaFinalizacion
-                                        ?: ahora
+                                    orden.fechaFinalizacion ?: ahora
                             )
 
                         else ->

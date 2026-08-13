@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -37,11 +36,120 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Diseño aprobado"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="6dp"
+            android:text="Especificaciones técnicas"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etTipoElemento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Elemento: puerta, portón, ventana, escalera..."
+            android:inputType="textCapSentences" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Medidas"
             android:textStyle="bold"
-            android:textSize="15sp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="4dp" />
+            android:layout_marginTop="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/etAlto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:hint="Alto"
+                android:inputType="numberDecimal" />
+
+            <EditText
+                android:id="@+id/etAncho"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:hint="Ancho"
+                android:inputType="numberDecimal" />
+
+            <EditText
+                android:id="@+id/etLargo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:hint="Largo"
+                android:inputType="numberDecimal" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Medidas en metros. Usa largo/profundidad cuando aplique."
+            android:textSize="12sp"
+            android:layout_marginTop="2dp" />
+
+        <EditText
+            android:id="@+id/etCantidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Cantidad"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/etMaterial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Material: aluminio, PTR, C-100, lámina, acrílico..."
+            android:inputType="textCapSentences" />
+
+        <EditText
+            android:id="@+id/etPerfilCalibre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Perfil / calibre: PTR 1x1, C-100, calibre 18..."
+            android:inputType="textCapSentences" />
+
+        <EditText
+            android:id="@+id/etAcabado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Acabado: pintura, galvanizado, anodizado..."
+            android:inputType="textCapSentences" />
+
+        <EditText
+            android:id="@+id/etColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Color"
+            android:inputType="textCapWords" />
+
+        <EditText
+            android:id="@+id/etObservacionesTecnicas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Observaciones técnicas"
+            android:inputType="textCapSentences|textMultiLine"
+            android:minLines="3"
+            android:gravity="top" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="6dp"
+            android:text="Diseño aprobado por el cliente"
+            android:textSize="17sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnSeleccionarDiseno"
@@ -54,9 +162,10 @@
             android:id="@+id/tvDisenoSeleccionado"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:text="Sin diseño adjunto"
-            android:paddingTop="6dp"
-            android:paddingBottom="8dp" />
+            android:textSize="13sp" />
 
         <EditText
             android:id="@+id/etSubtotal"
