@@ -62,7 +62,17 @@ class ClientesFragment : Fragment() {
     private fun configurarEventos() {
 
         binding.btnNuevoCliente.setOnClickListener {
-            mostrarFormulario()
+
+            try {
+                mostrarFormulario()
+            } catch (e: Exception) {
+
+                Toast.makeText(
+                    requireContext(),
+                    "Error al abrir formulario: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
     }
 
@@ -97,7 +107,9 @@ class ClientesFragment : Fragment() {
         mostrarDialogoCliente(cliente)
     }
 
-    private fun mostrarDialogoCliente(cliente: ClienteEntity?) {
+    private fun mostrarDialogoCliente(
+        cliente: ClienteEntity?
+    ) {
 
         val dialogView = layoutInflater.inflate(
             R.layout.dialog_cliente,
@@ -105,31 +117,49 @@ class ClientesFragment : Fragment() {
         )
 
         val etNombre =
-            dialogView.findViewById<EditText>(R.id.etNombre)
+            dialogView.findViewById<EditText>(
+                R.id.etNombre
+            )
 
         val etEmpresa =
-            dialogView.findViewById<EditText>(R.id.etEmpresa)
+            dialogView.findViewById<EditText>(
+                R.id.etEmpresa
+            )
 
         val etRfc =
-            dialogView.findViewById<EditText>(R.id.etRfc)
+            dialogView.findViewById<EditText>(
+                R.id.etRfc
+            )
 
         val etRazonSocial =
-            dialogView.findViewById<EditText>(R.id.etRazonSocial)
+            dialogView.findViewById<EditText>(
+                R.id.etRazonSocial
+            )
 
         val etRegimenFiscal =
-            dialogView.findViewById<EditText>(R.id.etRegimenFiscal)
+            dialogView.findViewById<EditText>(
+                R.id.etRegimenFiscal
+            )
 
         val etCodigoPostalFiscal =
-            dialogView.findViewById<EditText>(R.id.etCodigoPostalFiscal)
+            dialogView.findViewById<EditText>(
+                R.id.etCodigoPostalFiscal
+            )
 
         val etTelefono =
-            dialogView.findViewById<EditText>(R.id.etTelefono)
+            dialogView.findViewById<EditText>(
+                R.id.etTelefono
+            )
 
         val etCorreo =
-            dialogView.findViewById<EditText>(R.id.etCorreo)
+            dialogView.findViewById<EditText>(
+                R.id.etCorreo
+            )
 
         val etDireccion =
-            dialogView.findViewById<EditText>(R.id.etDireccion)
+            dialogView.findViewById<EditText>(
+                R.id.etDireccion
+            )
 
         if (cliente != null) {
 
@@ -138,7 +168,9 @@ class ClientesFragment : Fragment() {
             etRfc.setText(cliente.rfc)
             etRazonSocial.setText(cliente.razonSocial)
             etRegimenFiscal.setText(cliente.regimenFiscal)
-            etCodigoPostalFiscal.setText(cliente.codigoPostalFiscal)
+            etCodigoPostalFiscal.setText(
+                cliente.codigoPostalFiscal
+            )
             etTelefono.setText(cliente.telefono)
             etCorreo.setText(cliente.correo)
             etDireccion.setText(cliente.direccion)
@@ -154,7 +186,10 @@ class ClientesFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(titulo)
             .setView(dialogView)
-            .setNegativeButton("Cancelar", null)
+            .setNegativeButton(
+                "Cancelar",
+                null
+            )
             .setPositiveButton(
                 if (cliente == null) {
                     "Guardar"
@@ -166,15 +201,34 @@ class ClientesFragment : Fragment() {
                 if (cliente == null) {
 
                     viewModel.crearCliente(
-                        nombre = etNombre.text.toString(),
-                        empresa = etEmpresa.text.toString(),
-                        rfc = etRfc.text.toString(),
-                        razonSocial = etRazonSocial.text.toString(),
-                        regimenFiscal = etRegimenFiscal.text.toString(),
-                        codigoPostalFiscal = etCodigoPostalFiscal.text.toString(),
-                        telefono = etTelefono.text.toString(),
-                        correo = etCorreo.text.toString(),
-                        direccion = etDireccion.text.toString()
+
+                        nombre =
+                            etNombre.text.toString(),
+
+                        empresa =
+                            etEmpresa.text.toString(),
+
+                        rfc =
+                            etRfc.text.toString(),
+
+                        razonSocial =
+                            etRazonSocial.text.toString(),
+
+                        regimenFiscal =
+                            etRegimenFiscal.text.toString(),
+
+                        codigoPostalFiscal =
+                            etCodigoPostalFiscal.text.toString(),
+
+                        telefono =
+                            etTelefono.text.toString(),
+
+                        correo =
+                            etCorreo.text.toString(),
+
+                        direccion =
+                            etDireccion.text.toString()
+
                     ) { correcto ->
 
                         if (correcto) {
@@ -198,16 +252,36 @@ class ClientesFragment : Fragment() {
                 } else {
 
                     viewModel.actualizarCliente(
+
                         cliente = cliente,
-                        nombre = etNombre.text.toString(),
-                        empresa = etEmpresa.text.toString(),
-                        rfc = etRfc.text.toString(),
-                        razonSocial = etRazonSocial.text.toString(),
-                        regimenFiscal = etRegimenFiscal.text.toString(),
-                        codigoPostalFiscal = etCodigoPostalFiscal.text.toString(),
-                        telefono = etTelefono.text.toString(),
-                        correo = etCorreo.text.toString(),
-                        direccion = etDireccion.text.toString()
+
+                        nombre =
+                            etNombre.text.toString(),
+
+                        empresa =
+                            etEmpresa.text.toString(),
+
+                        rfc =
+                            etRfc.text.toString(),
+
+                        razonSocial =
+                            etRazonSocial.text.toString(),
+
+                        regimenFiscal =
+                            etRegimenFiscal.text.toString(),
+
+                        codigoPostalFiscal =
+                            etCodigoPostalFiscal.text.toString(),
+
+                        telefono =
+                            etTelefono.text.toString(),
+
+                        correo =
+                            etCorreo.text.toString(),
+
+                        direccion =
+                            etDireccion.text.toString()
+
                     ) { correcto ->
 
                         if (correcto) {
@@ -232,53 +306,64 @@ class ClientesFragment : Fragment() {
             .show()
     }
 
-    private fun mostrarOpciones(cliente: ClienteEntity) {
+    private fun mostrarOpciones(
+        cliente: ClienteEntity
+    ) {
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(cliente.nombre)
             .setItems(
                 arrayOf(
                     "Número: ${cliente.numeroCliente}",
+
                     "Empresa: ${
                         cliente.empresa.ifBlank {
                             "Particular"
                         }
                     }",
+
                     "RFC: ${
                         cliente.rfc.ifBlank {
                             "No registrado"
                         }
                     }",
+
                     "Razón social: ${
                         cliente.razonSocial.ifBlank {
                             "No registrada"
                         }
                     }",
+
                     "Régimen fiscal: ${
                         cliente.regimenFiscal.ifBlank {
                             "No registrado"
                         }
                     }",
+
                     "Código postal fiscal: ${
                         cliente.codigoPostalFiscal.ifBlank {
                             "No registrado"
                         }
                     }",
+
                     "Teléfono: ${
                         cliente.telefono.ifBlank {
                             "Sin teléfono"
                         }
                     }",
+
                     "Correo: ${
                         cliente.correo.ifBlank {
                             "Sin correo"
                         }
                     }",
+
                     "Dirección: ${
                         cliente.direccion.ifBlank {
                             "Sin dirección"
                         }
                     }",
+
                     "Editar cliente",
                     "Eliminar cliente"
                 )
@@ -298,15 +383,22 @@ class ClientesFragment : Fragment() {
             .show()
     }
 
-    private fun confirmarEliminacion(cliente: ClienteEntity) {
+    private fun confirmarEliminacion(
+        cliente: ClienteEntity
+    ) {
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Eliminar cliente")
             .setMessage(
                 "¿Deseas eliminar a ${cliente.nombre}?"
             )
-            .setNegativeButton("Cancelar", null)
-            .setPositiveButton("Eliminar") { _, _ ->
+            .setNegativeButton(
+                "Cancelar",
+                null
+            )
+            .setPositiveButton(
+                "Eliminar"
+            ) { _, _ ->
 
                 viewModel.eliminarCliente(cliente)
 

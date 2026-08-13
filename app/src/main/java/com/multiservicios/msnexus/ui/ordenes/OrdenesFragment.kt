@@ -23,7 +23,9 @@ import com.multiservicios.msnexus.databinding.FragmentOrdenesBinding
 import com.multiservicios.msnexus.util.OrdenPdfGenerator
 import com.multiservicios.msnexus.viewmodel.ClienteViewModel
 import com.multiservicios.msnexus.viewmodel.OrdenViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.Locale
 
@@ -75,7 +77,17 @@ class OrdenesFragment : Fragment() {
     private fun configurarEventos() {
 
         binding.btnNuevaOrden.setOnClickListener {
-            mostrarFormulario()
+
+            try {
+                mostrarFormulario()
+            } catch (e: Exception) {
+
+                Toast.makeText(
+                    requireContext(),
+                    "Error al abrir orden: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
     }
 
@@ -111,6 +123,7 @@ class OrdenesFragment : Fragment() {
             ) {
 
                 clienteViewModel.clientes.collect { clientes ->
+
                     clientesActuales = clientes
                 }
             }
@@ -139,9 +152,21 @@ class OrdenesFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Seleccionar cliente")
             .setItems(nombres) { _, posicion ->
-                mostrarFormularioOrden(
-                    clientes[posicion]
-                )
+
+                try {
+
+                    mostrarFormularioOrden(
+                        clientes[posicion]
+                    )
+
+                } catch (e: Exception) {
+
+                    Toast.makeText(
+                        requireContext(),
+                        "Error al abrir orden: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
             .setNegativeButton(
                 "Cancelar",
@@ -290,8 +315,11 @@ class OrdenesFragment : Fragment() {
             .setItems(
                 arrayOf(
                     "Cliente: ${orden.nombreCliente}",
+
                     "Trabajo: ${orden.tipoTrabajo}",
+
                     "Estado: ${orden.estado}",
+
                     "Total: $${
                         String.format(
                             Locale.getDefault(),
@@ -299,6 +327,7 @@ class OrdenesFragment : Fragment() {
                             orden.total
                         )
                     }",
+
                     "Cambiar estatus",
                     "Generar PDF",
                     "Eliminar orden"
@@ -392,9 +421,8 @@ class OrdenesFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
 
             val resultado =
-                kotlinx.coroutines.withContext(
-                    kotlinx.coroutines.Dispatchers.IO
-                ) {
+                withContext(Dispatchers.IO) {
+
                     OrdenPdfGenerator.generar(
                         requireContext(),
                         orden
@@ -440,8 +468,7 @@ class OrdenesFragment : Fragment() {
 
             } else {
 
-                val file =
-                    File(resultado)
+                val file = File(resultado)
 
                 uri = FileProvider.getUriForFile(
                     requireContext(),
