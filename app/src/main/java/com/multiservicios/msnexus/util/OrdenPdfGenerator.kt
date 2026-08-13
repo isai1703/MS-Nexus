@@ -31,13 +31,16 @@ object OrdenPdfGenerator {
 
             val document = PdfDocument()
 
-            val pageInfo = PdfDocument.PageInfo.Builder(
-                PAGE_WIDTH,
-                PAGE_HEIGHT,
-                1
-            ).create()
+            val pageInfo =
+                PdfDocument.PageInfo.Builder(
+                    PAGE_WIDTH,
+                    PAGE_HEIGHT,
+                    1
+                ).create()
 
-            val page = document.startPage(pageInfo)
+            val page =
+                document.startPage(pageInfo)
+
             val canvas = page.canvas
 
             val black = android.graphics.Color.rgb(25, 25, 25)
@@ -46,69 +49,75 @@ object OrdenPdfGenerator {
             val darkGray = android.graphics.Color.rgb(55, 55, 55)
             val white = android.graphics.Color.WHITE
 
-            val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                color = black
-                strokeWidth = 1f
-            }
+            val paint =
+                Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                    color = black
+                    strokeWidth = 1f
+                }
 
-            val titlePaint = Paint(paint).apply {
-                textSize = 18f
-                typeface = android.graphics.Typeface.DEFAULT_BOLD
-            }
+            val titlePaint =
+                Paint(paint).apply {
+                    textSize = 18f
+                    typeface = android.graphics.Typeface.DEFAULT_BOLD
+                }
 
-            val sectionPaint = Paint(paint).apply {
-                textSize = 11f
-                typeface = android.graphics.Typeface.DEFAULT_BOLD
-            }
+            val sectionPaint =
+                Paint(paint).apply {
+                    textSize = 11f
+                    typeface = android.graphics.Typeface.DEFAULT_BOLD
+                }
 
-            val textPaint = Paint(paint).apply {
-                textSize = 9.5f
-            }
+            val textPaint =
+                Paint(paint).apply {
+                    textSize = 9.5f
+                }
 
-            val smallPaint = Paint(paint).apply {
-                textSize = 8f
-                color = gray
-            }
+            val smallPaint =
+                Paint(paint).apply {
+                    textSize = 8f
+                    color = gray
+                }
 
-            val boldPaint = Paint(paint).apply {
-                textSize = 9.5f
-                typeface = android.graphics.Typeface.DEFAULT_BOLD
-            }
+            val boldPaint =
+                Paint(paint).apply {
+                    textSize = 9.5f
+                    typeface = android.graphics.Typeface.DEFAULT_BOLD
+                }
 
-            val whitePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                color = white
-                textSize = 10f
-                typeface = android.graphics.Typeface.DEFAULT_BOLD
-            }
+            val whitePaint =
+                Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                    color = white
+                    textSize = 10f
+                    typeface = android.graphics.Typeface.DEFAULT_BOLD
+                }
 
-            /*
-             * ENCABEZADO CON LOGO
-             */
-
-            val logo = BitmapFactory.decodeResource(
-                context.resources,
-                R.drawable.ms_nexus_logo
-            )
+            val logo =
+                BitmapFactory.decodeResource(
+                    context.resources,
+                    R.drawable.ms_nexus_logo
+                )
 
             if (logo != null) {
 
                 val logoMaxWidth = 260f
                 val logoMaxHeight = 72f
 
-                val ratio = minOf(
-                    logoMaxWidth / logo.width.toFloat(),
-                    logoMaxHeight / logo.height.toFloat()
-                )
+                val ratio =
+                    minOf(
+                        logoMaxWidth / logo.width.toFloat(),
+                        logoMaxHeight / logo.height.toFloat()
+                    )
 
                 val logoWidth = logo.width * ratio
                 val logoHeight = logo.height * ratio
 
-                val logoRect = RectF(
-                    MARGIN,
-                    25f,
-                    MARGIN + logoWidth,
-                    25f + logoHeight
-                )
+                val logoRect =
+                    RectF(
+                        MARGIN,
+                        25f,
+                        MARGIN + logoWidth,
+                        25f + logoHeight
+                    )
 
                 canvas.drawBitmap(
                     logo,
@@ -134,16 +143,13 @@ object OrdenPdfGenerator {
                 )
             }
 
-            /*
-             * FOLIO
-             */
-
-            val folioBox = RectF(
-                405f,
-                30f,
-                PAGE_WIDTH - MARGIN,
-                78f
-            )
+            val folioBox =
+                RectF(
+                    405f,
+                    30f,
+                    PAGE_WIDTH - MARGIN,
+                    78f
+                )
 
             paint.color = darkGray
 
@@ -184,10 +190,6 @@ object OrdenPdfGenerator {
             paint.strokeWidth = 1f
 
             var y = 115f
-
-            /*
-             * INFORMACIÓN DE LA ORDEN
-             */
 
             drawSectionTitle(
                 canvas,
@@ -234,10 +236,6 @@ object OrdenPdfGenerator {
             )
 
             y += 30f
-
-            /*
-             * DATOS DEL CLIENTE
-             */
 
             drawSectionTitle(
                 canvas,
@@ -329,10 +327,6 @@ object OrdenPdfGenerator {
 
             y += 30f
 
-            /*
-             * DETALLE DEL SERVICIO
-             */
-
             drawSectionTitle(
                 canvas,
                 "DETALLE DEL SERVICIO",
@@ -366,15 +360,17 @@ object OrdenPdfGenerator {
 
             y += 17f
 
-            val descripcion = orden.descripcionTrabajo.ifBlank {
-                "Sin descripción"
-            }
+            val descripcion =
+                orden.descripcionTrabajo.ifBlank {
+                    "Sin descripción"
+                }
 
-            val descripcionLineas = dividirTexto(
-                descripcion,
-                textPaint,
-                CONTENT_WIDTH
-            )
+            val descripcionLineas =
+                dividirTexto(
+                    descripcion,
+                    textPaint,
+                    CONTENT_WIDTH
+                )
 
             for (linea in descripcionLineas.take(5)) {
 
@@ -390,9 +386,161 @@ object OrdenPdfGenerator {
 
             y += 15f
 
-            /*
-             * RESUMEN ECONÓMICO
-             */
+            drawSectionTitle(
+                canvas,
+                "ESPECIFICACIONES TÉCNICAS",
+                y,
+                sectionPaint,
+                lightGray
+            )
+
+            y += 26f
+
+            drawLabelValue(
+                canvas,
+                "Elemento:",
+                orden.tipoElemento.ifBlank {
+                    "No especificado"
+                },
+                MARGIN,
+                y,
+                boldPaint,
+                textPaint
+            )
+
+            y += 20f
+
+            val medidas =
+                "${formatNumber(orden.alto)} × " +
+                "${formatNumber(orden.ancho)} × " +
+                formatNumber(orden.largo)
+
+            drawLabelValue(
+                canvas,
+                "Medidas (A × An × L):",
+                medidas,
+                MARGIN,
+                y,
+                boldPaint,
+                textPaint
+            )
+
+            y += 20f
+
+            drawLabelValue(
+                canvas,
+                "Cantidad:",
+                orden.cantidad.toString(),
+                MARGIN,
+                y,
+                boldPaint,
+                textPaint
+            )
+
+            y += 20f
+
+            drawLabelValue(
+                canvas,
+                "Material:",
+                orden.material.ifBlank {
+                    "No especificado"
+                },
+                MARGIN,
+                y,
+                boldPaint,
+                textPaint
+            )
+
+            y += 20f
+
+            drawLabelValue(
+                canvas,
+                "Perfil / calibre:",
+                orden.perfilCalibre.ifBlank {
+                    "No especificado"
+                },
+                MARGIN,
+                y,
+                boldPaint,
+                textPaint
+            )
+
+            y += 20f
+
+            drawLabelValue(
+                canvas,
+                "Acabado:",
+                orden.acabado.ifBlank {
+                    "No especificado"
+                },
+                MARGIN,
+                y,
+                boldPaint,
+                textPaint
+            )
+
+            y += 20f
+
+            drawLabelValue(
+                canvas,
+                "Color:",
+                orden.color.ifBlank {
+                    "No especificado"
+                },
+                MARGIN,
+                y,
+                boldPaint,
+                textPaint
+            )
+
+            y += 20f
+
+            if (orden.observacionesTecnicas.isNotBlank()) {
+
+                canvas.drawText(
+                    "Observaciones técnicas:",
+                    MARGIN,
+                    y,
+                    boldPaint
+                )
+
+                y += 16f
+
+                val observaciones =
+                    dividirTexto(
+                        orden.observacionesTecnicas,
+                        textPaint,
+                        CONTENT_WIDTH
+                    )
+
+                for (linea in observaciones.take(3)) {
+
+                    canvas.drawText(
+                        linea,
+                        MARGIN,
+                        y,
+                        textPaint
+                    )
+
+                    y += 14f
+                }
+
+            } else {
+
+                drawLabelValue(
+                    canvas,
+                    "Observaciones técnicas:",
+                    "Sin observaciones",
+                    MARGIN,
+                    y,
+                    boldPaint,
+                    textPaint
+                )
+
+                y += 18f
+            }
+
+            y += 15f
 
             drawSectionTitle(
                 canvas,
@@ -501,10 +649,6 @@ object OrdenPdfGenerator {
 
             y += 50f
 
-            /*
-             * OBSERVACIONES
-             */
-
             drawSectionTitle(
                 canvas,
                 "OBSERVACIONES",
@@ -531,10 +675,6 @@ object OrdenPdfGenerator {
 
             y += 65f
 
-            /*
-             * CONFORMIDAD
-             */
-
             drawSectionTitle(
                 canvas,
                 "CONFORMIDAD DEL CLIENTE",
@@ -545,10 +685,11 @@ object OrdenPdfGenerator {
 
             y += 24f
 
-            val conformidad = Paint(paint).apply {
-                textSize = 8.5f
-                color = gray
-            }
+            val conformidad =
+                Paint(paint).apply {
+                    textSize = 8.5f
+                    color = gray
+                }
 
             canvas.drawText(
                 "El cliente manifiesta haber recibido el servicio indicado",
@@ -567,10 +708,6 @@ object OrdenPdfGenerator {
             )
 
             y += 28f
-
-            /*
-             * FIRMAS
-             */
 
             val signatureTop = y
 
@@ -631,10 +768,6 @@ object OrdenPdfGenerator {
                 boldPaint
             )
 
-            /*
-             * PIE DE PÁGINA
-             */
-
             paint.color = lightGray
 
             canvas.drawRect(
@@ -659,74 +792,94 @@ object OrdenPdfGenerator {
                 smallPaint
             )
 
-            /*
-             * FINALIZAR
-             */
-
             document.finishPage(page)
 
             val fileName = "${orden.folio}.pdf"
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 
-                val values = ContentValues().apply {
+                val values =
+                    ContentValues().apply {
 
-                    put(
-                        MediaStore.Downloads.DISPLAY_NAME,
-                        fileName
-                    )
+                        put(
+                            MediaStore.Downloads.DISPLAY_NAME,
+                            fileName
+                        )
 
-                    put(
-                        MediaStore.Downloads.MIME_TYPE,
-                        "application/pdf"
-                    )
+                        put(
+                            MediaStore.Downloads.MIME_TYPE,
+                            "application/pdf"
+                        )
 
-                    put(
-                        MediaStore.Downloads.RELATIVE_PATH,
-                        Environment.DIRECTORY_DOWNLOADS +
-                            "/MS Nexus"
-                    )
+                        put(
+                            MediaStore.Downloads.RELATIVE_PATH,
+                            Environment.DIRECTORY_DOWNLOADS +
+                                "/MS Nexus"
+                        )
 
-                    put(
-                        MediaStore.Downloads.IS_PENDING,
-                        1
-                    )
-                }
-
-                val resolver = context.contentResolver
-
-                val uri = resolver.insert(
-                    MediaStore.Downloads.EXTERNAL_CONTENT_URI,
-                    values
-                ) ?: return null
-
-                resolver.openOutputStream(uri).use { output ->
-
-                    if (output == null) {
-                        resolver.delete(uri, null, null)
-                        return null
+                        put(
+                            MediaStore.Downloads.IS_PENDING,
+                            1
+                        )
                     }
 
-                    document.writeTo(output)
-                }
+                val resolver =
+                    context.contentResolver
 
-                values.clear()
+                val uri =
+                    resolver.insert(
+                        MediaStore.Downloads.EXTERNAL_CONTENT_URI,
+                        values
+                    ) ?: return null
 
-                values.put(
-                    MediaStore.Downloads.IS_PENDING,
-                    0
-                )
+                try {
 
-                resolver.update(
-                    uri,
-                    values,
-                    null,
+                    resolver.openOutputStream(uri).use { output ->
+
+                        if (output == null) {
+
+                            resolver.delete(
+                                uri,
+                                null,
+                                null
+                            )
+
+                            return null
+                        }
+
+                        document.writeTo(output)
+                    }
+
+                    values.clear()
+
+                    values.put(
+                        MediaStore.Downloads.IS_PENDING,
+                        0
+                    )
+
+                    resolver.update(
+                        uri,
+                        values,
+                        null,
+                        null
+                    )
+
+                    document.close()
+
+                    uri.toString()
+
+                } catch (_: Exception) {
+
+                    resolver.delete(
+                        uri,
+                        null,
+                        null
+                    )
+
+                    document.close()
+
                     null
-                )
-
-                document.close()
-
-                uri.toString()
+                }
 
             } else {
 
@@ -735,19 +888,21 @@ object OrdenPdfGenerator {
                         Environment.DIRECTORY_DOWNLOADS
                     )
 
-                val folder = File(
-                    directory,
-                    "MS Nexus"
-                )
+                val folder =
+                    File(
+                        directory,
+                        "MS Nexus"
+                    )
 
                 if (!folder.exists()) {
                     folder.mkdirs()
                 }
 
-                val file = File(
-                    folder,
-                    fileName
-                )
+                val file =
+                    File(
+                        folder,
+                        fileName
+                    )
 
                 file.outputStream().use { output ->
                     document.writeTo(output)
@@ -772,9 +927,10 @@ object OrdenPdfGenerator {
         backgroundColor: Int
     ) {
 
-        val background = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = backgroundColor
-        }
+        val background =
+            Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = backgroundColor
+            }
 
         canvas.drawRect(
             MARGIN,
@@ -809,7 +965,8 @@ object OrdenPdfGenerator {
             labelPaint
         )
 
-        val labelWidth = labelPaint.measureText(label)
+        val labelWidth =
+            labelPaint.measureText(label)
 
         canvas.drawText(
             value,
@@ -829,11 +986,17 @@ object OrdenPdfGenerator {
         boldPaint: Paint
     ) {
 
-        val borderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = android.graphics.Color.LTGRAY
-            style = Paint.Style.STROKE
-            strokeWidth = 0.7f
-        }
+        val borderPaint =
+            Paint(Paint.ANTI_ALIAS_FLAG).apply {
+
+                color =
+                    android.graphics.Color.LTGRAY
+
+                style =
+                    Paint.Style.STROKE
+
+                strokeWidth = 0.7f
+            }
 
         canvas.drawRect(
             MARGIN,
@@ -864,11 +1027,14 @@ object OrdenPdfGenerator {
         maxWidth: Float
     ): List<String> {
 
-        val palabras = texto.trim().split(
-            Regex("\\s+")
-        )
+        val palabras =
+            texto.trim().split(
+                Regex("\\s+")
+            )
 
-        val lineas = mutableListOf<String>()
+        val lineas =
+            mutableListOf<String>()
+
         var lineaActual = ""
 
         for (palabra in palabras) {
@@ -880,7 +1046,10 @@ object OrdenPdfGenerator {
                     "$lineaActual $palabra"
                 }
 
-            if (paint.measureText(candidata) <= maxWidth) {
+            if (
+                paint.measureText(candidata) <=
+                maxWidth
+            ) {
 
                 lineaActual = candidata
 
@@ -910,5 +1079,25 @@ object OrdenPdfGenerator {
             "%.2f",
             value
         )
+    }
+
+    private fun formatNumber(
+        value: Double
+    ): String {
+
+        return if (
+            value == value.toLong().toDouble()
+        ) {
+
+            value.toLong().toString()
+
+        } else {
+
+            String.format(
+                Locale.US,
+                "%.2f",
+                value
+            )
+        }
     }
 }
